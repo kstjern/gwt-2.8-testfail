@@ -1,0 +1,78 @@
+apply plugin: 'java'
+apply plugin: 'checkstyle'
+apply plugin: 'eclipse'
+
+repositories {
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+    
+    mavenCentral()
+}
+
+dependencies {
+
+    compile 'com.google.guava:guava-gwt:20.0-SNAPSHOT'
+
+    compile 'com.google.gwt:gwt-user:2.8.0-rc2'
+    compile 'com.google.gwt:gwt-dev:2.8.0-rc2'
+
+    testCompile 'junit:junit:4.12'
+    
+}
+
+
+
+test {
+    testLogging.showStandardStreams = true
+    systemProperties = ['gwt.args': '-logLevel INFO']
+    // Gwt tests require src/test dirs on classpath.
+    classpath += files(sourceSets.main.java.srcDirs,
+                       sourceSets.test.java.srcDirs)
+}
+
+task testWeb(type: Test) {
+    testLogging.showStandardStreams = true
+    systemProperties = ['gwt.args': '-web -logLevel WARN']
+    // Gwt tests require src/test dirs on classpath.
+    classpath += files(sourceSets.main.java.srcDirs,
+                       sourceSets.test.java.srcDirs)
+}
+
+
+
+clean {
+    delete 'war/WEB-INF'
+}
+
+task compileGwt(type: JavaExec,  group: 'GWT', dependsOn: [classes]) {
+    main 'com.google.gwt.dev.Compiler'
+    classpath files(sourceSets.main.compileClasspath,
+                    // Gwt compile requires source dirs on classpath.
+                    sourceSets.main.java.srcDirs)
+
+    if (project.hasProperty('debug')) args = ['com.code.transcoder-debug', '-style', 'PRETTY']
+    else args = ['com.code.transcoder', '-style', 'PRETTY']
+}
+
+task codeserver(type: JavaExec,  group: 'GWT', dependsOn: [classes]) {
+    main 'com.google.gwt.dev.DevMode'
+    classpath files(sourceSets.main.compileClasspath,
+                    // Gwt compile requires source dirs on classpath.
+                    sourceSets.main.java.srcDirs)
+    args = ['-superDevMode', '-port', '8889', '-startupUrl', 'index.html', 'com.code.transcoder']
+
+}
+
+task warCleanup (type: Delete) {
+    mustRunAfter compileGwt
+
+    delete 'war/com.code.transcoder/sc/schema'
+    delete 'war/com.code.transcoder/sc/system'
+}
+
+build {
+    dependsOn compileGwt
+    dependsOn warCleanup
+}
+

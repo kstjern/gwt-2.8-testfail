@@ -1,0 +1,14 @@
+
+task clean(type: Delete) {
+    delete 'build'
+}
+
+task bundle(type: Copy, dependsOn: ':app:build') {
+    from('app/war/') {
+        include 'index.html'
+        include 'images/**'
+        include 'com.code.transcoder/**'
+    }
+    into 'build/war'
+    includeEmptyDirs false
+}

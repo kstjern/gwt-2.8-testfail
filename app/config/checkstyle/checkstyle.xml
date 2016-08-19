@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+    "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
+    "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+
+
+<module name="Checker">
+
+    <!-- Checks whether files end with a new line.                        -->
+    <!-- See http://checkstyle.sf.net/config_misc.html#NewlineAtEndOfFile -->
+  <module name="RegexpMultiline">
+    <property name="format" value="\r"/>
+    <property name="fileExtensions" value="java"/>
+    <property name="message" value="Carriage return"/>
+    <property name="severity" value="warning"/>
+  </module>
+  <module name="RegexpMultiline">
+    <property name="format" value="^ *\t+"/>
+    <property name="fileExtensions" value="java"/>
+    <property name="message" value="Tabbed indentation"/>
+    <property name="severity" value="warning"/>
+  </module>
+
+</module>
+

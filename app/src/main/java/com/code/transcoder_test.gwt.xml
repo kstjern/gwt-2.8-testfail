@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.6.1//EN" "file:////opt/gwt-2.6.1/gwt-module.dtd">
+<module>
+
+    <inherits name='com.code.transcoder-base'/>
+    
+    <define-configuration-property name="scriptInjector.pageRelativeModulePath" is-multi-valued="true"/>
+    <extend-configuration-property name="scriptInjector.pageRelativeModulePath" value="com.code.transcoder_test.JUnit=."/>
+ 
+</module>
